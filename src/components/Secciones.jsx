@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import ProjectCard from "./ProjectCard.jsx";
 import { proyectos } from "../data/proyectos.js";
 import {
@@ -24,10 +24,67 @@ function Tags({ items }) {
   );
 }
 
+// Contenido del cuadro de proyectos: muestra la lista o el detalle de uno
+function Proyectos() {
+  const [seleccionado, setSeleccionado] = useState(null);
+  const ref = useRef(null);
+
+  // Al cambiar entre lista y detalle, vuelve al inicio del cuadro
+  useEffect(() => {
+    ref.current?.closest(".panel-cuerpo")?.scrollTo(0, 0);
+  }, [seleccionado]);
+
+  const proyecto = proyectos.find((p) => p.slug === seleccionado);
+
+  if (proyecto) {
+    return (
+      <div ref={ref} className="proyecto-detalle">
+        <button className="volver" onClick={() => setSeleccionado(null)}>
+          ← Volver a proyectos
+        </button>
+
+        <p className="etiqueta">Proyecto personal · {proyecto.anio}</p>
+        <h3 className="proyecto-titulo">{proyecto.titulo}</h3>
+        <p className="proyecto-descripcion">{proyecto.descripcion}</p>
+
+        <div className="proyecto-bloque">
+          <h4>Stack</h4>
+          <Tags items={proyecto.stack} />
+        </div>
+
+        <div className="proyecto-bloque">
+          <h4>Aspectos destacados</h4>
+          <ul className="lista">
+            {proyecto.destacados.map((punto) => (
+              <li key={punto}>{punto}</li>
+            ))}
+          </ul>
+        </div>
+
+        <a href={proyecto.repo} target="_blank" rel="noreferrer" className="btn">
+          Ver repositorio en GitHub
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={ref}>
+      <p className="detalle-intro">
+        Haz click en un proyecto para ver todos sus detalles.
+      </p>
+      <div className="grid-proyectos">
+        {proyectos.map((p) => (
+          <ProjectCard key={p.slug} proyecto={p} onSeleccionar={setSeleccionado} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // Cada sección tiene:
-//   Resumen -> lo que se ve dentro del cuadro
+//   Resumen -> vista corta (no se usa en la portada actual)
 //   Detalle -> lo que se ve con el cuadro agrandado
-// El orden de este arreglo es el orden del menú.
 export const secciones = [
   {
     id: "perfil",
@@ -93,11 +150,6 @@ export const secciones = [
           <p className="resumen-fuerte">{x.cargo}</p>
           <p className="resumen-fecha">{x.fecha}</p>
           <p>{x.lugar}</p>
-          <ul className="lista">
-            {x.tareas.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
         </div>
       )),
     Detalle: () =>
@@ -125,24 +177,11 @@ export const secciones = [
     Resumen: () =>
       proyectos.map((p) => (
         <div key={p.slug}>
-          <p className="resumen-fuerte">
-            {p.titulo} <span className="resumen-fecha">· {p.anio}</span>
-          </p>
+          <p className="resumen-fuerte">{p.titulo}</p>
           <p>{p.resumen}</p>
         </div>
       )),
-    Detalle: () => (
-      <>
-        <p className="detalle-intro">
-          Haz click en un proyecto para ver su página con todos los detalles.
-        </p>
-        <div className="grid-proyectos">
-          {proyectos.map((p) => (
-            <ProjectCard key={p.slug} proyecto={p} />
-          ))}
-        </div>
-      </>
-    ),
+    Detalle: Proyectos,
   },
   {
     id: "habilidades",
@@ -170,9 +209,6 @@ export const secciones = [
           <li key={i.idioma}>
             {i.idioma}: {i.nivel}
           </li>
-        ))}
-        {actividades.map((a) => (
-          <li key={a}>{a}</li>
         ))}
       </ul>
     ),

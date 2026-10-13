@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
-
-export default function ProjectCard({ proyecto }) {
+// Tarjeta de un proyecto. Al hacer click muestra su detalle dentro del mismo cuadro.
+export default function ProjectCard({ proyecto, onSeleccionar }) {
   return (
-    <Link to={`/proyectos/${proyecto.slug}`} className="card">
+    <button className="card" onClick={() => onSeleccionar(proyecto.slug)}>
       <span className="card-anio">{proyecto.anio}</span>
       <h3>{proyecto.titulo}</h3>
       <p>{proyecto.resumen}</p>
@@ -14,6 +13,6 @@ export default function ProjectCard({ proyecto }) {
         ))}
       </ul>
       <span className="card-mas">Ver proyecto →</span>
-    </Link>
+    </button>
   );
 }

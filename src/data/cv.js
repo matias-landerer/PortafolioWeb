@@ -30,7 +30,7 @@ export const contacto = [
 ];
 
 export const perfil =
-  "Estudiante de Ciencias de la Computación con sólida formación en algoritmos, estructuras de datos y desarrollo de software. Experiencia práctica a través de proyectos personales y roles académicos como ayudante universitario. Orientado al trabajo en equipo, con capacidad de comunicación técnica en español e inglés.";
+  "Estudiante de Ciencias de la Computación con interés en infraestructura y arquitectura/desarrollo de software. Experiencia práctica a través de proyectos personales y roles académicos como ayudante universitario. Orientado al trabajo en equipo, con capacidad de comunicación técnica en español e inglés.";
 
 export const educacion = [
   {
@@ -70,7 +70,7 @@ export const habilidades = [
   { grupo: "Herramientas", items: ["Git", "GitHub", "Linux", "Docker", "AWS"] },
   {
     grupo: "Paradigmas",
-    items: ["OOP", "Programación funcional", "Diseño de APIs REST"],
+    items: ["APIs REST", "OOP", "Programación funcional"],
   },
 ];
 
